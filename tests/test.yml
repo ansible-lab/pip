@@ -1,0 +1,27 @@
+---
+
+- hosts: all
+
+  vars:
+    pip_packages:
+      # Specify names and versions
+      - name: flask
+        version: "0.12.2"
+      # Or specify state (present, absent, latest, forcereinstall)
+      - name: requests
+        state: absent
+      - name: django
+        version: "1.11.5"
+        state: forcereinstall
+      # Packages to get the latest release
+      - docker
+
+  pre_tasks:
+    - name: Update apt cache.
+      apt:
+        cache_valid_time: 600
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+
+  roles:
+    - role_under_test

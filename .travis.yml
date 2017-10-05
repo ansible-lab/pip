@@ -1,0 +1,29 @@
+---
+services: docker
+
+env:
+  - distro: ubuntu1604
+  - distro: ubuntu1404
+  - distro: centos7
+  - distro: debian8
+  - distro: fedora24
+
+script:
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
+
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/dm/64a7d3059090d2e833ed4658ca399d91/raw/
+  - chmod +x ${PWD}/tests/test.sh
+
+  # Run tests.
+  - ${PWD}/tests/test.sh
+
+  # Test whether packages are installed as specified.
+  - docker exec --tty ${container_id} pip list installed | grep -e '^flask.*0\.12\.2.*$'
+  - docker exec --tty ${container_id} pip list installed | grep '^django'
+  - docker exec --tty ${container_id} pip list installed | grep '^docker'
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -1,0 +1,23 @@
+---
+
+- name: Register python version
+  command: python3 --version 2>&1 | perl -anE 'say $F[-1]'
+  register: python_version
+  tags:
+    - build
+
+- name: Ensure Pip is installed.
+  package:
+    name: "{{ 'python3-pip' if (python_version | version_compare(3.0, '>=')) else 'python-pip' }}"
+    state: present
+  tags:
+    - build
+
+- name: Ensure pip_packages
+  pip:
+    name: "{{ item.name | default(item) }}"
+    state: "{{ item.state | default(omit) }}"
+    version: "{{ item.version | default(omit) }}"
+  with_items: "{{ pip_packages }}"
+  tags:
+    - configure
