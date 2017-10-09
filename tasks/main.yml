@@ -7,21 +7,9 @@
   tags:
     - build
 
-- name: debug
+- name: Python version print
   debug:
     msg: "{{ python_version }}"
-
-- name: Register pip version
-  command: which pip3
-  register: pip_executable
-  when: python_version is defined
-  ignore_errors: yes
-  tags:
-    - build
-
-- name: debug
-  debug:
-    msg: "{{ pip_executable }}"
 
 - name: Register python2 version
   command: python --version 2>&1 | perl -anE 'say $F[-1]'
@@ -31,7 +19,7 @@
   tags:
     - build
 
-- name: debug
+- name: Python version print
   debug:
     msg: "{{ python_version }}"
 
@@ -42,14 +30,14 @@
   tags:
     - build
 
-- name: Register pip version
+- name: Register pip2 version
   command: which pip
   register: pip_executable
   ignore_errors: yes
   tags:
     - build
 
-- name: Register pip version
+- name: Register pip3 version
   command: which pip3
   register: pip_executable
   ignore_errors: yes
