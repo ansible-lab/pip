@@ -10,6 +10,8 @@
 - name: Set python_version fact
   set_fact:
     python_version: "{{ python_version_output.stdout }}"
+  tags:
+    - build
 
 - name: Register python2 version
   shell: python --version 2>&1 | cut -d ' ' -f2
@@ -36,6 +38,8 @@
 - name: Set pip_executable fact
   set_fact:
     pip_executable: "{{ pip_executable_output.stdout }}"
+  tags:
+    - build
 
 - name: Register pip3 version
   command: which pip3
@@ -47,6 +51,8 @@
 - name: Set pip_executable fact
   set_fact:
     pip_executable: "{{ pip_executable_output.stdout }}"
+  tags:
+    - build
 
 - name: Ensure pip_packages
   pip:
