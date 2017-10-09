@@ -11,10 +11,6 @@
   set_fact:
     python_version: "{{ python_version_output.stdout }}"
 
-- name: Python3 version print
-  debug:
-    msg: "{{ python_version }}"
-
 - name: Register python2 version
   shell: python --version 2>&1 | cut -d ' ' -f2
   register: python_version_output
@@ -41,10 +37,6 @@
   set_fact:
     pip_executable: "{{ pip_executable_output.stdout }}"
 
-- name: Pip2 version print
-  debug:
-    msg: "{{ pip_executable }}"
-
 - name: Register pip3 version
   command: which pip3
   register: pip_executable_output
@@ -55,10 +47,6 @@
 - name: Set pip_executable fact
   set_fact:
     pip_executable: "{{ pip_executable_output.stdout }}"
-
-- name: Pip3 version print
-  debug:
-    msg: "{{ pip_executable }}"
 
 - name: Ensure pip_packages
   pip:
