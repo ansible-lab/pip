@@ -32,10 +32,14 @@
 
 - name: Register pip2 version
   command: which pip
-  register: pip_executable
+  register: pip_executable_output
   ignore_errors: yes
   tags:
     - build
+
+- name: Set pip_executable fact
+  set_fact:
+    pip_executable: "{{ pip_executable_output.stdout }}"
 
 - name: Pip2 version print
   debug:
@@ -43,10 +47,14 @@
 
 - name: Register pip3 version
   command: which pip3
-  register: pip_executable
+  register: pip_executable_output
   ignore_errors: yes
   tags:
     - build
+
+- name: Set pip_executable fact
+  set_fact:
+    pip_executable: "{{ pip_executable_output.stdout }}"
 
 - name: Pip3 version print
   debug:
