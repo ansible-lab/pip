@@ -1,27 +1,27 @@
 ---
 
 - name: Register python3 version
-  command: python3 --version 2>&1 | perl -anE 'say $F[-1]'
-  register: python_version
+  shell: python3 --version 2>&1 | cut -d ' ' -f2
+  register: python_version_output
   ignore_errors: yes
   tags:
     - build
+
+- name: Set python_version fact
+  set_fact:
+    python_version: "{{ python_version_output.stdout }}"
 
 - name: Python3 version print
   debug:
     msg: "{{ python_version }}"
 
 - name: Register python2 version
-  command: python --version 2>&1 | perl -anE 'say $F[-1]'
-  register: python_version
+  shell: python --version 2>&1 | cut -d ' ' -f2
+  register: python_version_output
   ignore_errors: yes
   when: not((python_version is undefined) or (python_version is none) or (python_version | trim == ''))
   tags:
     - build
-
-- name: Python2 version print
-  debug:
-    msg: "{{ python_version }}"
 
 - name: Ensure Pip is installed.
   package:
@@ -37,12 +37,20 @@
   tags:
     - build
 
+- name: Pip2 version print
+  debug:
+    msg: "{{ pip_executable }}"
+
 - name: Register pip3 version
   command: which pip3
   register: pip_executable
   ignore_errors: yes
   tags:
     - build
+
+- name: Pip3 version print
+  debug:
+    msg: "{{ pip_executable }}"
 
 - name: Ensure pip_packages
   pip:
