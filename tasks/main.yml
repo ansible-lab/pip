@@ -7,7 +7,7 @@
   tags:
     - build
 
-- name: Python version print
+- name: Python3 version print
   debug:
     msg: "{{ python_version }}"
 
@@ -19,7 +19,7 @@
   tags:
     - build
 
-- name: Python version print
+- name: Python2 version print
   debug:
     msg: "{{ python_version }}"
 
