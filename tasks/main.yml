@@ -15,7 +15,7 @@
   command: python --version 2>&1 | perl -anE 'say $F[-1]'
   register: python_version
   ignore_errors: yes
-  when: python_version is not defined
+  when: not((python_version is undefined) or (python_version is none) or (python_version | trim == ''))
   tags:
     - build
 
