@@ -1,10 +1,39 @@
 ---
 
-- name: Register python version
+- name: Register python3 version
   command: python3 --version 2>&1 | perl -anE 'say $F[-1]'
   register: python_version
+  ignore_errors: yes
   tags:
     - build
+
+- name: debug
+  debug:
+    msg: "{{ python_version }}"
+
+- name: Register pip version
+  command: which pip3
+  register: pip_executable
+  when: python_version is defined
+  ignore_errors: yes
+  tags:
+    - build
+
+- name: debug
+  debug:
+    msg: "{{ pip_executable }}"
+
+- name: Register python2 version
+  command: python --version 2>&1 | perl -anE 'say $F[-1]'
+  register: python_version
+  ignore_errors: yes
+  when: python_version is not defined
+  tags:
+    - build
+
+- name: debug
+  debug:
+    msg: "{{ python_version }}"
 
 - name: Ensure Pip is installed.
   package:
@@ -13,8 +42,23 @@
   tags:
     - build
 
+- name: Register pip version
+  command: which pip
+  register: pip_executable
+  ignore_errors: yes
+  tags:
+    - build
+
+- name: Register pip version
+  command: which pip3
+  register: pip_executable
+  ignore_errors: yes
+  tags:
+    - build
+
 - name: Ensure pip_packages
   pip:
+    executable: "{{ pip_executable }}"
     name: "{{ item.name | default(item) }}"
     state: "{{ item.state | default(omit) }}"
     version: "{{ item.version | default(omit) }}"
