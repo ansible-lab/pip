@@ -8,6 +8,11 @@ env:
   - distro: centos7
   - distro: debian8
   - distro: fedora24
+  - ANSIBLE_INSTALL_VERSION: 2.0.2.0
+  - ANSIBLE_INSTALL_VERSION: 2.1.6.0
+  - ANSIBLE_INSTALL_VERSION: 2.2.3.0
+  - ANSIBLE_INSTALL_VERSION: 2.3.2.0
+  - ANSIBLE_INSTALL_VERSION: 2.4.0.0
 
 before_install:
   # Pull container.
@@ -17,7 +22,7 @@ script:
   # Configure test script so we can run extra tests after playbook is run.
   - export container_id=$(date +%s)
   - export cleanup=false
-  - export test_idempotence=false
+  - export test_idempotence=true
 
   # Download test shim.
   - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/dm/64a7d3059090d2e833ed4658ca399d91/raw/
@@ -33,9 +38,9 @@ script:
   - 'docker exec "${container_id}" ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml -vvvv'
 
   # Test whether packages are installed as specified.
-  - docker exec --tty "${container_id}" pip list installed | grep -e '^flask.*0\.12\.2.*$'
-  - docker exec --tty "${container_id}" pip list installed | grep '^django'
-  - docker exec --tty "${container_id}" pip list installed | grep '^docker'
+  # - docker exec --tty "${container_id}" pip list installed | grep -e '^Flask.*0\.12\.2.*$'
+  # - docker exec --tty "${container_id}" pip list installed | grep '^Django'
+  # - docker exec --tty "${container_id}" pip list installed | grep '^docker'
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/

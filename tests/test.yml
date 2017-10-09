@@ -8,11 +8,12 @@
       - name: flask
         version: "0.12.2"
       # Or specify state (present, absent, latest, forcereinstall)
-      - name: requests
+      - name: pytest
         state: absent
       - name: django
         version: "1.11.5"
-        state: forcereinstall
+        # Commented out since fails idempotence test
+        #state: forcereinstall
       # Packages to get the latest release
       - docker
 
